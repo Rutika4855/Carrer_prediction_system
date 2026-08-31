@@ -1,0 +1,230 @@
+{% extends 'career/base.html' %}
+{% load career_filters %}
+
+{% block title %}Dashboard - Career Guidance{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mt-5">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Welcome, {{ student.user.username }}!</h2>
+                <p class="lead text-center">This is your personalized career dashboard.</p>
+
+                <div class="row mt-4">
+                    <div class="col-12 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Your Profile <a href="{% url 'career:update_profile' %}" class="btn btn-sm btn-outline-primary float-right">Edit</a></h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><strong>Marks:</strong> {{ student.marks }}</li>
+                                    <li class="list-group-item"><strong>Interest:</strong> {{ student.interest }}</li>
+                                    <li class="list-group-item"><strong>Skills:</strong> {{ student.skills|default:"No skills added yet." }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if predicted_career %}
+                        <div class="col-12 mb-4">
+                            <div class="card bg-warning text-dark">
+                                <div class="card-body">
+                                    <h5 class="card-title">Predicted Career</h5>
+                                    <h3 class="card-text">{{ predicted_career.name }}</h3>
+                                    <p class="card-text">{{ predicted_career.description }}</p>
+                                    <p class="card-text"><strong>Salary Range:</strong> {{ predicted_career.salary_range }}</p>
+                                    <p class="card-text"><strong>Recommended Courses:</strong> {{ predicted_career.courses }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if suggested_careers %}
+                        <div class="col-12 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Suggested Careers for {{ student.interest }} Background</h5>
+                                    <ul class="list-group list-group-flush">
+                                        {% for career in suggested_careers %}
+                                            <li class="list-group-item">{{ career }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="col-12 mb-4">
+                            <div class="card bg-secondary text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Required Skills for {{ predicted_career.name }}</h5>
+                                    {% if required_skills_for_career %}
+                                        <ul>
+                                            {% for skill in required_skills_for_career %}
+                                                <li>{{ skill }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p>No specific required skills listed.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if missing_skills %}
+                            <div class="col-12 mb-4">
+                                <div class="card bg-danger text-white">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Missing Skills for {{ predicted_career.name }}</h5>
+                                        <ul>
+                                            {% for skill in missing_skills %}
+                                                <li>{{ skill }} 
+                                                    {% if learning_platforms %}
+                                                        (Learn on:
+                                                        {% for platform in learning_platforms|get_item:skill %}
+                                                            <span class="badge badge-light">{{ platform }}</span>{% if not forloop.last %},{% endif %}
+                                                        {% empty %}
+                                                            No platforms suggested
+                                                        {% endfor %}
+                                                        )
+                                                    {% endif %}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if roadmap %}
+                        <div class="col-12 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Career Roadmap</h5>
+                                    <ul class="list-group list-group-flush">
+                                        {% for item in roadmap %}
+                                            <li class="list-group-item">📌 {{ item }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if interview_prep %}
+                        <div class="col-12 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Interview Preparation for {{ predicted_career.name }}</h5>
+                                    
+                                    <h6>🧠 Technical Topics to Prepare</h6>
+                                    <ul>
+                                        {% for topic in interview_prep.technical_topics %}
+                                            <li>{{ topic }}</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <h6>📝 Technical Questions</h6>
+                                    <ul>
+                                        {% for question in interview_prep.technical_questions %}
+                                            <li>{{ question }}</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <h6>👔 HR Questions</h6>
+                                    <ul>
+                                        {% for question in interview_prep.hr_questions %}
+                                            <li>{{ question }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if swot_analysis %}
+                        <div class="col-12 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">🧾 SWOT Analysis - {{ predicted_career.name }}</h5>
+                                    
+                                    <h6>🟢 Strengths</h6>
+                                    <ul>
+                                        {% for strength in swot_analysis.strengths %}
+                                            <li>{{ strength }}</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <h6>🔴 Weaknesses</h6>
+                                    <ul>
+                                        {% for weakness in swot_analysis.weaknesses %}
+                                            <li>{{ weakness }}</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <h6>🟡 Opportunities</h6>
+                                    <ul>
+                                        {% for opportunity in swot_analysis.opportunities %}
+                                            <li>{{ opportunity }}</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                    <h6>⚫ Threats</h6>
+                                    <ul>
+                                        {% for threat in swot_analysis.threats %}
+                                            <li>{{ threat }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if abroad_opportunities %}
+                        <div class="col-12 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">✈️ Abroad Opportunities for {{ student.interest }} Stream</h5>
+                                    
+                                    {% for key, values in abroad_opportunities.items %}
+                                        <h6>{{ key }}</h6>
+                                        <ul>
+                                            {% for value in values %}
+                                                <li>{{ value }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    {% else %}
+                        <div class="col-12 mb-4">
+                            <div class="card bg-warning text-dark">
+                                <div class="card-body">
+                                    <h5 class="card-title">Predicted Career</h5>
+                                    <p class="card-text">No career predicted yet. Please update your profile and take the aptitude test.</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{% url 'career:update_profile' %}" class="btn btn-info btn-lg">Update Profile</a>
+                    {% if student.marks and student.interest and student.skills %}
+                        <a href="{% url 'career:aptitude_test' %}" class="btn btn-light btn-lg ml-3">Take Aptitude Test</a>
+                    {% else %}
+                        <button class="btn btn-light btn-lg ml-3" disabled>Take Aptitude Test (Complete Profile First)</button>
+                    {% endif %}
+                    {% if predicted_career %}
+                        <a href="{% url 'career:send_report' %}" class="btn btn-success btn-lg ml-3">Send Email Report</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

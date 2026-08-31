@@ -1,0 +1,112 @@
+{% extends 'career/base.html' %}
+
+{% block title %}Update Profile - Career Guidance{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mt-5">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Update Your Profile</h2>
+                <p class="lead text-center">Help us understand you better by providing your details.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="{{ form.marks.id_for_label }}">Educational Marks (%):</label>
+                        {{ form.marks }}
+                    </div>
+                    <div class="form-group">
+                        <label>Select Your Field of Interest:</label>
+                        <div>
+                        {% for radio in form.interest %}
+                            <div class="form-check form-check-inline">
+                                {{ radio.tag }}
+                                <label class="form-check-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.skills.id_for_label }}">Your Skills:</label>
+                        {{ form.skills }}
+                        <small class="form-text text-muted">{{ form.skills.help_text }}</small>
+                        <div id="suggested-skills-container" class="mt-3">
+                            <strong>Suggested Skills:</strong>
+                            <div id="skills-badges" class="d-flex flex-wrap">
+                                <!-- Skills will be loaded here by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Save and Continue</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ suggested_skills_by_interest|json_script:"suggested-skills-data" }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const interestRadios = document.querySelectorAll('input[name="interest"]');
+        const skillsTextarea = document.getElementById('id_skills');
+        const skillsBadgesContainer = document.getElementById('skills-badges');
+        const actualSuggestedSkills = JSON.parse(document.getElementById('suggested-skills-data').textContent);
+
+        function updateSuggestedSkills() {
+            skillsBadgesContainer.innerHTML = ''; // Clear previous badges
+            let selectedInterest = '';
+            interestRadios.forEach(radio => {
+                if (radio.checked) {
+                    selectedInterest = radio.value;
+                }
+            });
+
+            if (selectedInterest && actualSuggestedSkills[selectedInterest]) {
+                actualSuggestedSkills[selectedInterest].forEach(skill => {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge badge-info mr-2 mb-2 p-2';
+                    badge.textContent = skill;
+                    badge.style.cursor = 'pointer';
+                    badge.onclick = function() {
+                        addSkillToTextarea(skill);
+                    };
+                    skillsBadgesContainer.appendChild(badge);
+                });
+            } else if (actualSuggestedSkills['General']) {
+                 // Fallback for 'General' or if no specific interest skills
+                actualSuggestedSkills['General'].forEach(skill => {
+                    const badge = document.createElement('span');
+                    badge.className = 'badge badge-info mr-2 mb-2 p-2';
+                    badge.textContent = skill;
+                    badge.style.cursor = 'pointer';
+                    badge.onclick = function() {
+                        addSkillToTextarea(skill);
+                    };
+                    skillsBadgesContainer.appendChild(badge);
+                });
+            }
+        }
+
+        function addSkillToTextarea(skill) {
+            let currentSkills = skillsTextarea.value.trim();
+            if (currentSkills) {
+                let skillsArray = currentSkills.split(',').map(s => s.trim().toLowerCase());
+                if (!skillsArray.includes(skill.toLowerCase())) {
+                    skillsTextarea.value += ', ' + skill;
+                }
+            } else {
+                skillsTextarea.value = skill;
+            }
+        }
+
+        // Add event listeners to interest radio buttons
+        interestRadios.forEach(radio => {
+            radio.addEventListener('change', updateSuggestedSkills);
+        });
+
+        // Initial load
+        updateSuggestedSkills();
+    });
+</script>
+{% endblock %}

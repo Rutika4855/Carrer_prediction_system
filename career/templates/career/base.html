@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Career Guidance System{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxMDAnIGhlaWdodD0nMTAwJyB2aWV3Qm94PScwIDAgMTAwIDEwMCc+PHJlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIGZpbGw9JyMyYzNlNTAnLz48ZyBmaWxsPScjMzQ0OTVlJz48cmVjdCB4PScwJyB5PScwJyB3aWR0aD0nNTAnIGhlaWdodD0nNTAnLz48cmVjdCB4PSc1MCcgeT0nNTAnIHdpZHRoPSc1MCcgaGVpZ2h0PSc1MCcvPjwvZz48L3N2Zz4=");
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background-color: rgba(0,0,0,0.3);
+        }
+        .footer {
+            margin-top: auto;
+            background-color: rgba(0,0,0,0.3);
+            padding: 1rem 0;
+            text-align: center;
+        }
+        .content {
+            padding: 2rem 0;
+            flex-grow: 1;
+        }
+        .card {
+            background-color: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+        }
+        .form-control {
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+        }
+        .form-control::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        .form-control:focus {
+            background-color: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+            color: #fff;
+            box-shadow: none;
+        }
+        .btn-primary {
+            background-color: #2575fc;
+            border-color: #2575fc;
+        }
+        .btn-primary:hover {
+            background-color: #6a11cb;
+            border-color: #6a11cb;
+        }
+        /* Custom style for visible text in card list items */
+        .card .list-group-item {
+            color: #333; /* Darker color for readability */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'career:dashboard' %}">Career Guidance</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'career:dashboard' %}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'career:entrance_exams' %}">Entrance Exams</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'career:logout' %}">Logout ({{ user.username }})</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'career:register' %}">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'career:login' %}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container content">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Career Guidance System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

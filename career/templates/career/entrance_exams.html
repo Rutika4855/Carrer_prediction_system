@@ -1,0 +1,226 @@
+{% extends 'career/base.html' %}
+{% load static %}
+
+{% block title %}Entrance Exams - Career Guidance{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5 text-white">Explore Entrance Exams</h1>
+
+    <!-- Tabs for different streams -->
+    <ul class="nav nav-pills justify-content-center mb-4" id="examTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link {% if request.user.student.interest == 'Commerce' %}active{% endif %}" id="commerce-tab" data-toggle="tab" href="#commerce" role="tab">
+                <i class="fas fa-balance-scale"></i> Commerce
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.user.student.interest == 'Science' %}active{% endif %}" id="science-tab" data-toggle="tab" href="#science" role="tab">
+                <i class="fas fa-flask"></i> Science
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.user.student.interest == 'IT' %}active{% endif %}" id="it-tab" data-toggle="tab" href="#it" role="tab">
+                <i class="fas fa-laptop-code"></i> IT
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.user.student.interest == 'Arts' %}active{% endif %}" id="arts-tab" data-toggle="tab" href="#arts" role="tab">
+                <i class="fas fa-paint-brush"></i> Arts
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="examTabsContent">
+        <!-- Commerce Tab -->
+        <div class="tab-pane fade {% if request.user.student.interest == 'Commerce' %}show active{% endif %}" id="commerce" role="tabpanel">
+            <div class="row">
+                <!-- Exam Card: CA -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-calculator"></i> CA (Chartered Accountant)</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Eligibility:</strong> 12th pass, CA Foundation</p>
+                            <p><strong>Career Scope:</strong> Auditor, Tax Consultant, Finance Manager</p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="{% url 'career:aptitude_test_category' category_name='Commerce' %}" class="btn btn-info btn-sm">Take Mock Test</a>
+                            <a href="https://www.icai.org/" class="btn btn-secondary btn-sm float-right" target="_blank">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Exam Card: CS -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-landmark"></i> CS (Company Secretary)</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Eligibility:</strong> 12th pass (any stream except fine arts)</p>
+                            <p><strong>Exam Levels:</strong> CSEET, Executive, Professional</p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="{% url 'career:aptitude_test_category' category_name='Commerce' %}" class="btn btn-info btn-sm">Take Mock Test</a>
+                            <a href="https://www.icsi.edu/" class="btn btn-secondary btn-sm float-right" target="_blank">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Science Tab -->
+        <div class="tab-pane fade {% if request.user.student.interest == 'Science' %}show active{% endif %}" id="science" role="tabpanel">
+            <div class="row">
+                <!-- Exam Card: NEET -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-briefcase-medical"></i> NEET</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Eligibility:</strong> 12th with PCB, Min 50%</p>
+                            <p><strong>For:</strong> MBBS, BDS, AYUSH</p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="{% url 'career:aptitude_test_category' category_name='Medical' %}" class="btn btn-info btn-sm">Take Mock Test</a>
+                            <a href="https://neet.nta.nic.in/" class="btn btn-secondary btn-sm float-right" target="_blank">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Exam Card: GATE -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-cogs"></i> GATE</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Eligibility:</strong> B.E/B.Tech/B.Sc/M.Sc (Final Year or Completed)</p>
+                            <p><strong>For:</strong> M.Tech, PSU Jobs, Research</p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="{% url 'career:aptitude_test_category' category_name='Science' %}" class="btn btn-info btn-sm">Take Mock Test</a>
+                            <a href="https://gate.iitk.ac.in/" class="btn btn-secondary btn-sm float-right" target="_blank">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- IT Tab -->
+        <div class="tab-pane fade {% if request.user.student.interest == 'IT' %}show active{% endif %}" id="it" role="tabpanel">
+            <div class="row">
+                <!-- Exam Card: GATE -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-microchip"></i> GATE (for IT)</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Eligibility:</strong> Final year or completed B.E/B.Tech/B.Sc/M.Sc</p>
+                            <p><strong>Used for:</strong> M.Tech admissions, PSU recruitment</p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="{% url 'career:aptitude_test_category' category_name='IT' %}" class="btn btn-info btn-sm">Take Mock Test</a>
+                            <a href="https://gate.iitk.ac.in/" class="btn btn-secondary btn-sm float-right" target="_blank">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Exam Card: NIELIT -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-network-wired"></i> NIELIT 'O' Level</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Eligibility:</strong> 12th pass or ITI</p>
+                            <p><strong>Career Scope:</strong> Programmer, IT Assistant</p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="{% url 'career:aptitude_test_category' category_name='IT' %}" class="btn btn-info btn-sm">Take Mock Test</a>
+                            <a href="https://www.nielit.gov.in/" class="btn btn-secondary btn-sm float-right" target="_blank">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Arts Tab -->
+        <div class="tab-pane fade {% if request.user.student.interest == 'Arts' %}show active{% endif %}" id="arts" role="tabpanel">
+            <div class="row">
+                <!-- Exam Card: NET -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0"><i class="fas fa-university"></i> NET</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Eligibility:</strong> Postgraduate degree (55% for General)</p>
+                            <p><strong>For:</strong> Lecturer, Research Fellow</p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="{% url 'career:aptitude_test_category' category_name='Arts' %}" class="btn btn-info btn-sm">Take Mock Test</a>
+                            <a href="https://ugcnet.nta.nic.in/" class="btn btn-secondary btn-sm float-right" target="_blank">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Exam Card: UPSC -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0"><i class="fas fa-gavel"></i> UPSC Civil Services</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Eligibility:</strong> Graduation in any stream</p>
+                            <p><strong>For:</strong> IAS, IPS, IFS, etc.</p>
+                        </div>
+                        <div class="card-footer bg-light">
+                            <a href="{% url 'career:aptitude_test_category' category_name='Arts' %}" class="btn btn-info btn-sm">Take Mock Test</a>
+                            <a href="https://www.upsc.gov.in/" class="btn btn-secondary btn-sm float-right" target="_blank">Official Website</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .nav-pills .nav-link {
+        color: #fff;
+        background-color: transparent;
+        border: 1px solid #fff;
+        margin: 0 5px;
+        transition: all 0.3s ease;
+    }
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        color: #2c3e50;
+        background-color: #fff;
+        border-color: #fff;
+    }
+    .nav-pills .nav-link:hover {
+        color: #2c3e50;
+        background-color: #fff;
+        border-color: #fff;
+    }
+    .card {
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #333;
+        border: none;
+        border-radius: 10px;
+    }
+    .card-header {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .card-footer {
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+    .shadow-sm {
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+    }
+</style>
+{% endblock %}

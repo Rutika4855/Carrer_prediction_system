@@ -1,0 +1,44 @@
+{% extends 'career/base.html' %}
+
+{% block title %}Register - Career Guidance{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-5">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Register</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        {% if field.name != 'report_email' %}
+                            <div class="form-group">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="alert alert-danger mt-1">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="form-group">
+                        {{ form.report_email.label_tag }}
+                        {{ form.report_email }}
+                        {% if form.report_email.help_text %}
+                            <small class="form-text text-muted">{{ form.report_email.help_text }}</small>
+                        {% endif %}
+                        {% for error in form.report_email.errors %}
+                            <div class="alert alert-danger mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </form>
+                <p class="text-center mt-3">Already have an account? <a href="{% url 'career:login' %}" class="text-info">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
